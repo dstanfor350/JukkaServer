@@ -181,14 +181,10 @@ namespace JukkaServer
 
             // Todo: Process login here.
 
-            //DateTime dt = DateTime.Now;
-            //TimeSpan duration = new TimeSpan(30, 0, 0, 0);
-
             // Create the Login object
-            Login login = new Login(loginCollection);
-            //, "R6DIvk7", "bearer", 1209599, "Joe",
-            //                "C", "machine@jukka.com", new string[] { "admin", "service" },
-            //                "91cdb71d", dt, dt + duration
+            FakeExtensionManager mgr = new FakeExtensionManager();
+            mgr.WillBeValid = true;
+            Login login = new Login(loginCollection, mgr);
             if (login.AuthenticateUser())
             {
                 Console.WriteLine($"\nLogin Payload body:");
@@ -204,9 +200,6 @@ namespace JukkaServer
                 Console.WriteLine("Login Failed!!");
                 return new byte[0];
             }
-
-            //// Return the serialzed Json as a Byte array for the Response.
-            //return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(login, Formatting.Indented));
         }
 
         static void Main(string[] args)

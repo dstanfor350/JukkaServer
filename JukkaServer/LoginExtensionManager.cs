@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JukkaServer
 {
-    class LoginExtensionManager : IExtensionManager
+    class LoginExtensionManager : IExtensionLoginManager
     {
         public bool IsLoginValid(NameValueCollection loginCollection)
         {

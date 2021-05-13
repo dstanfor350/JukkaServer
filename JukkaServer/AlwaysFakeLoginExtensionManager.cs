@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace JukkaServer
 {
-    class AlwaysFakeLoginExtensionManager : IExtensionManager
-    {
-        public bool IsLoginValid(NameValueCollection loginCollection)
-        {
-            return true;
-        }
-    }
+    //public class AlwaysFakeLoginExtensionManager : IExtensionManager
+    //{
+    //    public bool WillBeValid { get; set; }
+
+    //    public bool IsLoginValid(NameValueCollection loginCollection)
+    //    {
+    //        return WillBeValid;
+    //    }
+    //}
 }

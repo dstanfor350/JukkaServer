@@ -7,9 +7,12 @@ using Newtonsoft.Json;
 
 namespace JukkaServer
 {
+
     [JsonObject(MemberSerialization.OptIn)]
     public class Login
     {
+        IExtensionLoginManager LoginMgr;
+
         // Might use UserCollection or might use the three values from UserCollection
         public NameValueCollection UserCollection { get; set; }
 
@@ -52,11 +55,14 @@ namespace JukkaServer
         {
         }
 
-        public Login(NameValueCollection loginCollection)
-//, string access_Token, string token_Type, int expires_in, string firstName,
-//            string lastName, string emailAddress, string[] roles,
-//            string UID, DateTime issuedDate, DateTime expires
+        public Login(NameValueCollection loginCollection, IExtensionLoginManager mgr)
+        //, string access_Token, string token_Type, int expires_in, string firstName,
+        //            string lastName, string emailAddress, string[] roles,
+        //            string UID, DateTime issuedDate, DateTime expires
         {
+            // The login manager is a property which can be assigned any login manager inheriting from IExtensionLoginManager
+            LoginMgr = mgr;
+
             // Might use UserCollection or might use the three values from UserCollection
             UserCollection = loginCollection;
 
@@ -81,19 +87,10 @@ namespace JukkaServer
             Issued = dt;
             Expires = dt + duration;
         }
- 
+
         public bool AuthenticateUser()
         {
-            // Dale: Below is a temp value setting for testing
-            UserAuthenticated = false;
-
-            IExtensionManager mgr = new LoginExtensionManager();
-            return mgr.IsLoginValid(UserCollection);
-
-            //if (IsLoginValid(UserCollection))
-            //    return UserAuthenticated;
-            //else
-            //    return false;
+            return LoginMgr.IsLoginValid(UserCollection);
         }
 
         private bool IsLoginValid(NameValueCollection userCollection)
