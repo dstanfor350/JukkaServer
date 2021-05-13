@@ -47,7 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlwaysFakeLoginExtensionManager.cs" />
     <Compile Include="Login.cs" />
+    <Compile Include="IExtensionManager.cs" />
+    <Compile Include="LoginExtensionManager.cs" />
     <Compile Include="MachineStatus.cs" />
     <Compile Include="OrderItemStatus.cs" />
     <Compile Include="OrderStatus.cs" />

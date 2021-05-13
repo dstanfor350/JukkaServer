@@ -10,9 +10,13 @@ namespace JukkaServer
     [JsonObject(MemberSerialization.OptIn)]
     public class Login
     {
+        // Might use UserCollection or might use the three values from UserCollection
+        public NameValueCollection UserCollection { get; set; }
+
         public string UserName { get; set; }
         public string Password { get; set; }
         public string GrantType { get; set; }
+        public bool UserAuthenticated { get; set; }
 
         [JsonProperty]
         public string Access_token { get; set; }
@@ -48,24 +52,55 @@ namespace JukkaServer
         {
         }
 
-        public Login(NameValueCollection loginCollection, string access_Token, string token_Type, int expires_in, string firstName,
-            string lastName, string emailAddress, string[] roles,
-            string UID, DateTime issuedDate, DateTime expires)
+        public Login(NameValueCollection loginCollection)
+//, string access_Token, string token_Type, int expires_in, string firstName,
+//            string lastName, string emailAddress, string[] roles,
+//            string UID, DateTime issuedDate, DateTime expires
         {
+            // Might use UserCollection or might use the three values from UserCollection
+            UserCollection = loginCollection;
+
             UserName = loginCollection[0];
             Password = loginCollection[1];
             GrantType = loginCollection[2];
 
-            Access_token = access_Token;
-            Token_Type = token_Type;
-            Expires_in = expires_in;
-            LastName = lastName;
-            Email = emailAddress;
-            Roles = roles;
-            UserId = UID;
-            Issued = issuedDate;
-            Expires = expires;
+            UserAuthenticated = false;
+
+            DateTime dt = DateTime.Now;
+            TimeSpan duration = new TimeSpan(30, 0, 0, 0);
+
+            // Hard coded for now.  Will be set later if User is Authenticated.
+            Access_token = "R6DIvk7";
+            Token_Type = "bearer";
+            Expires_in = 1209599;
+            FirstName = "Joe";
+            LastName = "C";
+            Email = "machine@jukka.com";
+            Roles = new string[] { "admin", "service" };
+            UserId = "91cdb71d";
+            Issued = dt;
+            Expires = dt + duration;
         }
+ 
+        public bool AuthenticateUser()
+        {
+            // Dale: Below is a temp value setting for testing
+            UserAuthenticated = false;
+
+            IExtensionManager mgr = new LoginExtensionManager();
+            return mgr.IsLoginValid(UserCollection);
+
+            //if (IsLoginValid(UserCollection))
+            //    return UserAuthenticated;
+            //else
+            //    return false;
+        }
+
+        private bool IsLoginValid(NameValueCollection userCollection)
+        {
+            return true;
+        }
+
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);

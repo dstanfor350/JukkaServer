@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
-using System.Web;
 using System.Text;
-using JukkaServer;
-using System.Collections.Specialized;
+using System.Web;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Diagnostics;
 
 namespace JukkaServer
 {
@@ -74,8 +70,13 @@ namespace JukkaServer
                         // Login
                         case "/prod/api/account/login":
                             NameValueCollection LoginCollection = MakeLoginCollectionFromQueryString(body);
-             
+
                             ResponseBody = MakeLogin(LoginCollection);
+                            if (ResponseBody.Length == 0)
+                            {
+                                context.Response.StatusCode = 401;
+                                context.Response.StatusDescription = "Wrong Password";
+                            }
                             context.Response.ContentLength64 = ResponseBody.Length;
                             break;
 
@@ -110,11 +111,11 @@ namespace JukkaServer
                             // Request body contain Machine as Json
                             MachineStatus status = JsonConvert.DeserializeObject<MachineStatus>(body);
 
-                            ResponseBody = MakeMachineStatus(status); 
+                            ResponseBody = MakeMachineStatus(status);
                             context.Response.ContentLength64 = ResponseBody.Length;
                             break;
 
-                        //default: // Dale: Need to complete this
+                            //default: // Dale: Need to complete this
                     }
                     Console.WriteLine();
                     break;
@@ -167,7 +168,7 @@ namespace JukkaServer
             NameValueCollection LoginCollection = HttpUtility.ParseQueryString(body);
             return LoginCollection;
         }
-        
+
         // loginCollection is a collection of the payload or Request x-www-form-urlencoded parameters.
         // In otherwords, the username, password and grant_type
         private static byte[] MakeLogin(NameValueCollection loginCollection)
@@ -180,26 +181,37 @@ namespace JukkaServer
 
             // Todo: Process login here.
 
-            DateTime dt = DateTime.Now;
-            TimeSpan duration = new TimeSpan(30, 0, 0, 0);
+            //DateTime dt = DateTime.Now;
+            //TimeSpan duration = new TimeSpan(30, 0, 0, 0);
 
             // Create the Login object
-            Login login = new Login(loginCollection, "R6DIvk7", "bearer", 1209599, "Joe",
-                "C", "machine@jukka.com", new string[] { "admin", "service" },
-                "91cdb71d", dt, dt + duration);
+            Login login = new Login(loginCollection);
+            //, "R6DIvk7", "bearer", 1209599, "Joe",
+            //                "C", "machine@jukka.com", new string[] { "admin", "service" },
+            //                "91cdb71d", dt, dt + duration
+            if (login.AuthenticateUser())
+            {
+                Console.WriteLine($"\nLogin Payload body:");
+                Console.WriteLine(loginCollection.ToString());
+                Console.WriteLine($"\nLogin Response:");
+                Console.WriteLine($"{login}");
 
-            Console.WriteLine($"\nLogin Payload body:");
-            Console.WriteLine(loginCollection.ToString());
-            Console.WriteLine($"\nLogin Response:");
-            Console.WriteLine($"{login}");
+                // Return the serialzed Json as a Byte array for the Response.
+                return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(login, Formatting.Indented));
+            }
+            else
+            {
+                Console.WriteLine("Login Failed!!");
+                return new byte[0];
+            }
 
-            // Return the serialzed Json as a Byte array for the Response.
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(login, Formatting.Indented));
+            //// Return the serialzed Json as a Byte array for the Response.
+            //return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(login, Formatting.Indented));
         }
 
         static void Main(string[] args)
         {
-            Console.WriteLine( "===== Jukka HTTP RESTful Listener =====");
+            Console.WriteLine("===== Jukka HTTP RESTful Listener =====");
 
             RunServer();
         }
