@@ -6,22 +6,38 @@ using Newtonsoft.Json;
 
 namespace JukkaServer
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Payment
     {
+        [JsonProperty]
         public string MachineId { get; set; }
+        [JsonProperty]
         public int OrderId { get; set; }
+        [JsonProperty]
         public int StoreId { get; set; }
+        [JsonProperty]
         public string InvoiceNumber { get; set; }
+        [JsonProperty]
         public string TransactionId { get; set; }
+        [JsonProperty]
         public decimal ApprovedAmount { get; set; }
+        [JsonProperty]
         public int ApprovalCode { get; set; }
+        [JsonProperty]
         public string MaskedCardNumber { get; set; }
+        [JsonProperty]
         public string CardType { get; set; }
+        [JsonProperty]
         public string NameOnCard { get; set; }
+        [JsonProperty]
         public string IssuerName { get; set; }
+        [JsonProperty]
         public int ExpiryDate { get; set; }
+        [JsonProperty]
         public string EntryMode { get; set; }
+        [JsonProperty]
         public int ErrorCode { get; set; }
+        [JsonProperty]
         public string Message { get; set; }
 
         Payment()

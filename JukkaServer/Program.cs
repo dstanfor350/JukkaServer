@@ -168,6 +168,8 @@ namespace JukkaServer
             return LoginCollection;
         }
         
+        // loginCollection is a collection of the payload or Request x-www-form-urlencoded parameters.
+        // In otherwords, the username, password and grant_type
         private static byte[] MakeLogin(NameValueCollection loginCollection)
         {
             Console.WriteLine("Login Payload collection:");
@@ -182,7 +184,7 @@ namespace JukkaServer
             TimeSpan duration = new TimeSpan(30, 0, 0, 0);
 
             // Create the Login object
-            Login login = new Login("R6DIvk7", "bearer", 1209599, "Joe",
+            Login login = new Login(loginCollection, "R6DIvk7", "bearer", 1209599, "Joe",
                 "C", "machine@jukka.com", new string[] { "admin", "service" },
                 "91cdb71d", dt, dt + duration);
 

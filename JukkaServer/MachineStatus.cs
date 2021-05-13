@@ -7,11 +7,16 @@ using Newtonsoft.Json;
 
 namespace JukkaServer
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class MachineStatus
     {
+        [JsonProperty]
         public string MachineId { get; set; }
+        [JsonProperty]
         public string Status { get; set; }
+        [JsonProperty]
         public string Reason { get; set; }
+        [JsonProperty]
         public DateTime TimeStamp { get; set; }
 
         public MachineStatus()
