@@ -182,8 +182,9 @@ namespace JukkaServer
             // Todo: Process login here.
 
             // Create the Login object
-            FakeExtensionManager mgr = new FakeExtensionManager();
+            FakeLoginExtensionManager mgr = new FakeLoginExtensionManager();
             mgr.WillBeValid = true;
+            //LoginExtensionManager mgr = new LoginExtensionManager();
             Login login = new Login(loginCollection, mgr);
             if (login.AuthenticateUser())
             {

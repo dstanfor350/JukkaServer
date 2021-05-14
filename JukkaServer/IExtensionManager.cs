@@ -11,14 +11,4 @@ namespace JukkaServer
     {
         bool IsLoginValid(NameValueCollection loginCollection);
     }
-
-    internal class FakeExtensionManager : IExtensionLoginManager
-    {
-        public bool WillBeValid { get; set; }
-
-        public bool IsLoginValid(NameValueCollection loginCollection)
-        {
-            return WillBeValid;
-        }
-    }
 }
