@@ -51,6 +51,9 @@ namespace JukkaServer
             switch (context.Request.HttpMethod)
             {
                 case "GET":
+                    // Jukka APIs use POST versus GET.
+                    // The switch below is just to test receiving a GET request
+                    // None of the Postman request issue http GET request. 
                     Console.WriteLine("GET");
                     switch (context.Request.Url.AbsolutePath)
                     {
@@ -64,6 +67,7 @@ namespace JukkaServer
                     }
                     break;
                 case "POST":
+                    // All of the Postman http request use the POST http method
                     Console.WriteLine($"Processing POST request: {context.Request.Url.AbsolutePath}");
                     switch (context.Request.Url.AbsolutePath)
                     {
